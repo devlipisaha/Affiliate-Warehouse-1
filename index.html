@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Affiliate Warehouse — Preferred Contractor Gateway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-base:      #080e17;
+    --bg-surface:   #0d1520;
+    --bg-elevated:  #131e2e;
+    --bg-input:     #0f1a28;
+    --border:       rgba(255,255,255,0.08);
+    --border-mid:   rgba(255,255,255,0.13);
+    --gold:         #FFD700;
+    --gold-dark:    #c8aa00;
+    --gold-dim:     rgba(255,215,0,0.12);
+    --text-primary: #eef2f7;
+    --text-secondary: rgba(238,242,247,0.60);
+    --text-muted:     rgba(238,242,247,0.36);
+    --accent-red:   #ff5c5c;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    overflow-x: hidden;
+  }
+
+  h1,h2,h3,h4 { font-family: 'Montserrat', sans-serif; }
+
+  /* ── STICKY HEADER ── */
+  .site-header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(8,14,23,0.94);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border-mid);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 64px;
+  }
+  .site-header::after {
+    content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.5;
+  }
+  .logo {
+    font-family: 'Montserrat', sans-serif; font-weight: 900;
+    font-size: 1.1rem; color: var(--text-primary);
+    letter-spacing: 0.04em; text-decoration: none;
+  }
+  .logo span { color: var(--gold); }
+  .header-nav { display: flex; align-items: center; gap: 12px; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-block; padding: 10px 22px; border-radius: 4px;
+    font-family: 'Montserrat', sans-serif; font-weight: 700;
+    font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.2s ease;
+    text-decoration: none; border: none; outline: none;
+  }
+  .btn-ghost {
+    background: transparent; border: 1.5px solid rgba(255,255,255,0.18);
+    color: var(--text-secondary);
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-gold { background: var(--gold); color: #080e17; }
+  .btn-gold:hover { background: #ffe433; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(255,215,0,0.28); }
+  .btn-lg { padding: 16px 36px; font-size: 0.92rem; }
+  .btn-full { width: 100%; text-align: center; display: block; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 120px 24px 100px; overflow: hidden;
+    background: var(--bg-base);
+  }
+  /* CSS-generated warehouse/industrial background */
+  .hero-bg-img {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      /* Ceiling lights */
+      radial-gradient(ellipse 60px 80px at 15% 8%, rgba(255,240,200,0.18) 0%, transparent 100%),
+      radial-gradient(ellipse 60px 80px at 35% 8%, rgba(255,240,200,0.18) 0%, transparent 100%),
+      radial-gradient(ellipse 60px 80px at 55% 8%, rgba(255,240,200,0.15) 0%, transparent 100%),
+      radial-gradient(ellipse 60px 80px at 75% 8%, rgba(255,240,200,0.18) 0%, transparent 100%),
+      radial-gradient(ellipse 60px 80px at 92% 8%, rgba(255,240,200,0.14) 0%, transparent 100%),
+      /* Floor reflection */
+      linear-gradient(to top, rgba(180,160,120,0.12) 0%, transparent 30%),
+      /* Shelf column shadows */
+      repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 68px,
+        rgba(0,0,0,0.18) 68px,
+        rgba(0,0,0,0.18) 74px,
+        transparent 74px,
+        transparent 142px
+      ),
+      /* Shelf horizontal bands */
+      repeating-linear-gradient(
+        180deg,
+        transparent 0px,
+        transparent 80px,
+        rgba(100,80,50,0.10) 80px,
+        rgba(100,80,50,0.10) 86px,
+        transparent 86px,
+        transparent 160px
+      ),
+      /* Base tone — warm industrial grey-brown */
+      linear-gradient(160deg, #1a1510 0%, #231c14 40%, #1c1811 70%, #141210 100%);
+    overflow: hidden;
+  }
+  /* Black shadow overlay over the entire background */
+  .hero-bg-img::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(0, 0, 0, 0.52);
+  }
+  .hero::before {
+    content: ''; position: absolute; top: 5%; left: 50%; transform: translateX(-50%);
+    width: 1000px; height: 650px; z-index: 1;
+    background: radial-gradient(ellipse, rgba(0,55,120,0.18) 0%, transparent 68%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ''; position: absolute; inset: 0; z-index: 1;
+    background-image:
+      linear-gradient(rgba(255,215,0,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,215,0,0.018) 1px, transparent 1px);
+    background-size: 64px 64px; pointer-events: none;
+  }
+  .hero-illustration {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 180px; z-index: 2;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 180' preserveAspectRatio='none'%3E%3Cpath fill='rgba(255,215,0,0.03)' d='M0,180 L0,110 L80,110 L80,70 L160,70 L160,110 L320,110 L320,50 L360,30 L400,50 L400,110 L520,110 L520,80 L560,60 L600,80 L600,110 L720,110 L720,70 L760,50 L800,70 L800,110 L960,110 L960,90 L1000,70 L1040,90 L1040,110 L1200,110 L1200,75 L1240,55 L1280,75 L1280,110 L1440,110 L1440,180 Z'/%3E%3C/svg%3E") no-repeat bottom center;
+    background-size: cover;
+  }
+  .hero-content { position: relative; z-index: 3; max-width: 840px; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--gold-dim); border: 1px solid rgba(255,215,0,0.28);
+    color: var(--gold); font-family: 'Montserrat', sans-serif;
+    font-size: 0.67rem; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase; padding: 7px 18px; border-radius: 2px;
+    margin-bottom: 32px; animation: fadeUp 0.8s 0.05s ease both;
+  }
+  .hero h1 {
+    font-size: clamp(2.1rem, 5.5vw, 3.6rem); font-weight: 900;
+    color: var(--text-primary); line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 22px; animation: fadeUp 0.8s 0.15s ease both;
+  }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+  .hero-sub {
+    font-size: 1.07rem; color: var(--text-secondary); line-height: 1.75;
+    max-width: 630px; margin: 0 auto 44px;
+    animation: fadeUp 0.8s 0.25s ease both;
+  }
+  .hero-ctas {
+    display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.35s ease both;
+  }
+  .hero-note {
+    margin-top: 32px; font-size: 0.77rem; color: var(--text-muted);
+    letter-spacing: 0.05em; animation: fadeUp 0.8s 0.45s ease both;
+  }
+
+  /* ── SHARED ── */
+  section { padding: 88px 24px; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-family: 'Montserrat', sans-serif; font-size: 0.67rem; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); opacity: 0.75; margin-bottom: 10px;
+  }
+  .section-title {
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 800;
+    color: var(--text-primary); line-height: 1.2; margin-bottom: 14px;
+  }
+  .section-desc {
+    font-size: 1rem; color: var(--text-secondary);
+    line-height: 1.72; max-width: 580px;
+  }
+
+  /* ── ACCESS CARDS ── */
+  .access-section { background: var(--bg-surface); }
+  .access-header { text-align: center; margin-bottom: 52px; }
+  .access-header .section-desc { margin: 0 auto; }
+  .cards-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px;
+  }
+  .access-card {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 8px; padding: 36px 28px;
+    position: relative; overflow: hidden; transition: all 0.25s ease;
+  }
+  .access-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold); transform: scaleX(0); transform-origin: left;
+    transition: transform 0.35s ease;
+  }
+  .access-card:hover { border-color: rgba(255,215,0,0.2); transform: translateY(-5px); box-shadow: 0 16px 40px rgba(0,0,0,0.45); }
+  .access-card:hover::before { transform: scaleX(1); }
+  .card-icon {
+    width: 50px; height: 50px; border-radius: 8px;
+    background: var(--gold-dim); border: 1px solid rgba(255,215,0,0.18);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px; font-size: 1.4rem;
+  }
+  .card-tag {
+    font-family: 'Montserrat', sans-serif; font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 7px;
+  }
+  .access-card h3 { font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin-bottom: 10px; }
+  .access-card p  { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.65; }
+
+  /* ── HOW IT WORKS ── */
+  .how-section { background: var(--bg-base); }
+  .how-header { text-align: center; margin-bottom: 60px; }
+  .steps-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0; position: relative;
+  }
+  .steps-grid::before {
+    content: ''; position: absolute; top: 39px; left: 16%; right: 16%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,215,0,0.2), transparent);
+  }
+  .step { padding: 0 28px; text-align: center; }
+  .step-num {
+    width: 78px; height: 78px; border-radius: 50%;
+    background: var(--gold-dim); border: 1.5px solid rgba(255,215,0,0.28);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 22px; font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem; font-weight: 900; color: var(--gold);
+    position: relative; z-index: 1; transition: all 0.3s ease;
+  }
+  .step:hover .step-num { background: rgba(255,215,0,0.2); transform: scale(1.07); }
+  .step h3 { font-size: 1rem; font-weight: 800; color: var(--text-primary); margin-bottom: 10px; }
+  .step p  { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.65; }
+
+  /* ── FEES ── */
+  .fees-section { background: var(--bg-surface); }
+  .fees-inner {
+    display: grid; grid-template-columns: 1fr 1.7fr;
+    gap: 60px; align-items: center;
+  }
+  .fees-infographic { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .fee-card { border-radius: 8px; padding: 24px 20px; }
+  .fee-card.no-discount { background: var(--bg-elevated); border: 1px solid var(--border-mid); }
+  .fee-card.discount { background: rgba(255,215,0,0.06); border: 1px solid rgba(255,215,0,0.22); }
+  .fee-card.billing {
+    grid-column: 1 / -1; background: var(--bg-elevated); border: 1px solid var(--border-mid);
+    display: flex; align-items: center; gap: 18px;
+  }
+  .fee-card-icon { font-size: 1.7rem; margin-bottom: 10px; display: block; }
+  .fee-card.billing .fee-card-icon { margin-bottom: 0; flex-shrink: 0; }
+  .fee-card-label {
+    font-family: 'Montserrat', sans-serif; font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px;
+  }
+  .fee-card-value {
+    font-family: 'Montserrat', sans-serif; font-size: 1.45rem; font-weight: 900;
+    color: var(--text-primary); line-height: 1.1; margin-bottom: 5px;
+  }
+  .fee-card.discount .fee-card-value { color: var(--gold); }
+  .fee-card-sub { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; }
+  .fee-card.billing .fee-card-body { flex: 1; }
+
+  /* ── NO LOCK-IN ── */
+  .lockin-section { background: var(--bg-base); }
+  .lockin-inner { text-align: center; max-width: 880px; margin: 0 auto; }
+  .lockin-inner > p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 44px; line-height: 1.65; }
+  .lockin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .lockin-item {
+    background: var(--bg-surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 32px 22px; transition: all 0.25s ease;
+  }
+  .lockin-item:hover {
+    border-color: rgba(255,215,0,0.28); background: rgba(255,215,0,0.04);
+    transform: translateY(-4px); box-shadow: 0 14px 36px rgba(0,0,0,0.38);
+  }
+  .lockin-icon { font-size: 1.9rem; margin-bottom: 14px; display: block; }
+  .lockin-item h4 { font-size: 0.97rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+  .lockin-item p  { font-size: 0.84rem; color: var(--text-secondary); line-height: 1.62; }
+
+  /* ── TRUST & COMPLIANCE ── */
+  .trust-section { background: var(--bg-surface); }
+  .trust-inner {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 40px 56px; align-items: start;
+  }
+  .trust-badge-row { display: flex; gap: 10px; margin-top: 26px; flex-wrap: wrap; }
+  .trust-badge {
+    display: flex; align-items: center; gap: 7px;
+    background: var(--bg-elevated); border: 1px solid var(--border-mid);
+    border-radius: 4px; padding: 7px 13px;
+    font-family: 'Montserrat', sans-serif; font-size: 0.7rem; font-weight: 700;
+    color: var(--text-secondary); letter-spacing: 0.04em;
+  }
+  .trust-quote-block {
+    background: var(--bg-elevated); border: 1px solid var(--border-mid);
+    border-left: 4px solid var(--gold); border-radius: 8px;
+    padding: 36px 32px; position: relative; overflow: hidden;
+  }
+  .trust-quote-block::before {
+    content: '"'; position: absolute; top: -18px; left: 18px;
+    font-size: 8rem; font-family: 'Montserrat', sans-serif; font-weight: 900;
+    color: rgba(255,215,0,0.05); line-height: 1;
+  }
+  .trust-quote-block p {
+    font-size: 1rem; color: var(--text-secondary);
+    line-height: 1.78; position: relative; z-index: 1;
+  }
+  .trust-quote-block p strong { color: var(--gold); }
+
+  /* WHAT WE ARE NOT */
+  .not-box {
+    grid-column: 1 / -1;
+    background: rgba(255,70,70,0.05); border: 1px solid rgba(255,92,92,0.18);
+    border-left: 4px solid var(--accent-red); border-radius: 8px; padding: 24px 28px;
+  }
+  .not-box-title {
+    font-family: 'Montserrat', sans-serif; font-size: 0.63rem; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent-red); opacity: 0.85; margin-bottom: 14px;
+  }
+  .not-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .not-list li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.87rem; color: var(--text-secondary); line-height: 1.5;
+  }
+  .not-list li::before {
+    content: '✕'; color: var(--accent-red); font-weight: 900;
+    font-size: 0.76rem; flex-shrink: 0; margin-top: 3px; opacity: 0.8;
+  }
+
+  /* ── FORMS ── */
+  .forms-section { background: var(--bg-base); }
+  .forms-header { text-align: center; margin-bottom: 40px; }
+  .forms-header .section-desc { margin: 12px auto 0; }
+  .tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+  .tab-btn {
+    padding: 10px 20px; border-radius: 4px;
+    font-family: 'Montserrat', sans-serif; font-weight: 700;
+    font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase;
+    cursor: pointer; border: 1px solid var(--border-mid);
+    background: var(--bg-surface); color: var(--text-muted); transition: all 0.2s;
+  }
+  .tab-btn.active, .tab-btn:hover {
+    background: var(--gold-dim); color: var(--gold); border-color: rgba(255,215,0,0.32);
+  }
+  .form-panel { display: none; }
+  .form-panel.active { display: block; }
+  .form-card {
+    background: var(--bg-surface); border: 1px solid var(--border-mid);
+    border-radius: 10px; padding: 44px 40px;
+    max-width: 720px; margin: 0 auto;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.45);
+  }
+  .form-card-header { margin-bottom: 22px; }
+  .form-card-header h3 { font-size: 1.25rem; font-weight: 800; color: var(--text-primary); }
+  .microcopy {
+    font-size: 0.82rem; color: var(--gold);
+    background: var(--gold-dim); border-left: 3px solid var(--gold);
+    padding: 11px 14px; border-radius: 0 4px 4px 0;
+    margin-bottom: 28px; line-height: 1.55; opacity: 0.9;
+  }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .form-group { display: flex; flex-direction: column; gap: 7px; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-group label {
+    font-family: 'Montserrat', sans-serif; font-size: 0.67rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted);
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 11px 14px; border: 1px solid var(--border-mid); border-radius: 4px;
+    font-family: 'Lato', sans-serif; font-size: 0.94rem; color: var(--text-primary);
+    background: var(--bg-input); transition: border-color 0.2s, background 0.2s; outline: none;
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(238,242,247,0.22); }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: rgba(255,215,0,0.42); background: rgba(255,215,0,0.03);
+  }
+  .form-group select { appearance: none; cursor: pointer; }
+  .form-group select option { background: #0d1520; }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .calendar-hint { font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+  .form-subdesc { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: 24px; }
+
+  /* ── FAQ ── */
+  .faq-section { background: var(--bg-surface); }
+  .faq-inner { display: grid; grid-template-columns: 1fr 2fr; gap: 60px; align-items: start; }
+  .faq-sidebar .section-desc { margin-top: 12px; }
+  .faq-list { display: flex; flex-direction: column; gap: 4px; }
+  .faq-item { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; transition: border-color 0.2s; }
+  .faq-item.open { border-color: rgba(255,215,0,0.2); }
+  .faq-q {
+    width: 100%; background: var(--bg-elevated); border: none; text-align: left;
+    padding: 17px 20px; font-family: 'Montserrat', sans-serif;
+    font-size: 0.91rem; font-weight: 700; color: var(--text-primary);
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    gap: 16px; transition: background 0.2s;
+  }
+  .faq-q:hover { background: rgba(255,215,0,0.04); }
+  .faq-q .icon {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid rgba(255,215,0,0.32); color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0; transition: transform 0.3s, background 0.2s;
+  }
+  .faq-item.open .faq-q .icon { transform: rotate(45deg); background: var(--gold-dim); }
+  .faq-a {
+    max-height: 0; overflow: hidden; transition: max-height 0.35s ease;
+    font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;
+    background: var(--bg-elevated);
+  }
+  .faq-item.open .faq-a { max-height: 300px; }
+  .faq-a-inner { padding: 14px 20px 18px; border-top: 1px solid var(--border); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg-base); border-top: 1px solid var(--border);
+    color: var(--text-muted); padding: 52px 24px 32px; text-align: center;
+  }
+  footer::before {
+    content: ''; display: block; width: 120px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 36px; opacity: 0.4;
+  }
+  .footer-inner { max-width: 900px; margin: 0 auto; }
+  .footer-logo { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.25rem; color: var(--text-primary); margin-bottom: 20px; }
+  .footer-logo span { color: var(--gold); }
+  .footer-links {
+    display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+    margin-bottom: 28px; font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .footer-links a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  .disclaimer { font-size: 0.76rem; color: rgba(238,242,247,0.27); line-height: 1.7; max-width: 700px; margin: 0 auto 16px; }
+  .disclaimer strong { color: rgba(238,242,247,0.45); }
+  .copyright { font-size: 0.72rem; color: rgba(238,242,247,0.18); }
+
+  /* ── PRICE TRACKING ── */
+  .tracking-section { background: var(--bg-elevated); padding: 64px 24px; }
+  .tracking-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .tracking-features { display: flex; flex-direction: column; gap: 16px; margin-top: 32px; }
+  .tracking-feat {
+    display: flex; align-items: flex-start; gap: 16px;
+    background: var(--bg-surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 22px; transition: border-color 0.2s;
+  }
+  .tracking-feat:hover { border-color: rgba(255,215,0,0.25); }
+  .tracking-feat-icon {
+    width: 44px; height: 44px; border-radius: 8px; flex-shrink: 0;
+    background: var(--gold-dim); border: 1px solid rgba(255,215,0,0.18);
+    display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+  }
+  .tracking-feat-body h4 {
+    font-size: 0.92rem; font-weight: 800; color: var(--text-primary); margin-bottom: 5px;
+  }
+  .tracking-feat-body p { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.6; }
+  .tracking-visual {
+    background: var(--bg-surface); border: 1px solid var(--border-mid);
+    border-radius: 12px; padding: 28px; overflow: hidden; position: relative;
+  }
+  .tracking-visual-label {
+    font-family: 'Montserrat', sans-serif; font-size: 0.63rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 20px;
+  }
+  .price-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+  }
+  .price-row:last-child { border-bottom: none; }
+  .price-row-label { font-size: 0.85rem; color: var(--text-secondary); }
+  .price-row-val { font-family: 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 800; }
+  .price-row-val.up { color: #ff6b6b; }
+  .price-row-val.down { color: #4ade80; }
+  .price-row-val.stable { color: var(--text-muted); }
+  .price-row-badge {
+    font-size: 0.68rem; font-weight: 700; padding: 3px 8px; border-radius: 3px;
+    font-family: 'Montserrat', sans-serif; letter-spacing: 0.06em;
+  }
+  .badge-up { background: rgba(255,107,107,0.12); color: #ff6b6b; }
+  .badge-down { background: rgba(74,222,128,0.1); color: #4ade80; }
+  .badge-stable { background: var(--bg-elevated); color: var(--text-muted); }
+  .tracking-alert-bar {
+    margin-top: 18px; background: rgba(255,215,0,0.08);
+    border: 1px solid rgba(255,215,0,0.22); border-radius: 6px; padding: 12px 16px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.8rem; color: var(--gold);
+    font-family: 'Montserrat', sans-serif; font-weight: 600;
+  }
+
+  /* ── REVIEWS ── */
+  .reviews-section { background: var(--bg-surface); padding: 88px 24px; }
+  .reviews-header { text-align: center; margin-bottom: 52px; }
+  .reviews-header .section-desc { margin: 0 auto; }
+  .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .review-card {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 10px; padding: 30px 28px; position: relative;
+    transition: all 0.25s ease;
+  }
+  .review-card:hover {
+    border-color: rgba(255,215,0,0.22); transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+  }
+  .review-stars { display: flex; gap: 3px; margin-bottom: 16px; font-size: 1rem; }
+  .review-text {
+    font-size: 0.92rem; color: var(--text-secondary); line-height: 1.72;
+    margin-bottom: 20px; font-style: italic;
+  }
+  .review-text::before { content: '"'; color: var(--gold); font-size: 1.4rem; line-height: 0; vertical-align: -4px; margin-right: 2px; }
+  .review-text::after  { content: '"'; color: var(--gold); font-size: 1.4rem; line-height: 0; vertical-align: -4px; margin-left: 2px; }
+  .review-author { display: flex; align-items: center; gap: 12px; }
+  .review-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--gold-dim); border: 1.5px solid rgba(255,215,0,0.22);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Montserrat', sans-serif; font-weight: 800;
+    font-size: 0.9rem; color: var(--gold);
+  }
+  .review-name { font-family: 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text-primary); }
+  .review-role { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+  .review-verified {
+    position: absolute; top: 20px; right: 20px;
+    font-size: 0.62rem; font-family: 'Montserrat', sans-serif; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: #4ade80; display: flex; align-items: center; gap: 4px;
+  }
+  .reviews-summary {
+    text-align: center; margin-top: 44px;
+    padding: 28px; background: var(--bg-base); border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .reviews-score {
+    font-family: 'Montserrat', sans-serif; font-size: 3rem; font-weight: 900;
+    color: var(--gold); line-height: 1;
+  }
+  .reviews-score-label { font-size: 0.82rem; color: var(--text-muted); margin-top: 6px; }
+
+  /* ── APPLY MODAL ── */
+  .modal-backdrop {
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(0,0,0,0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .modal-backdrop.open {
+    opacity: 1; pointer-events: all;
+  }
+  .modal {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-mid);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    width: 100%; max-width: 620px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 44px 40px;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,215,0,0.08);
+    transform: translateY(24px) scale(0.97);
+    transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease;
+    opacity: 0;
+  }
+  .modal-backdrop.open .modal {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  .modal-close {
+    position: absolute; top: 16px; right: 18px;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--bg-elevated); border: 1px solid var(--border-mid);
+    color: var(--text-muted); font-size: 1.1rem; line-height: 1;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; font-family: monospace;
+  }
+  .modal-close:hover { background: rgba(255,92,92,0.15); color: #ff6b6b; border-color: rgba(255,92,92,0.3); }
+  .modal-header { margin-bottom: 6px; }
+  .modal-eyebrow {
+    font-family: 'Montserrat', sans-serif; font-size: 0.63rem; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); opacity: 0.8; margin-bottom: 8px;
+  }
+  .modal-header h2 { font-size: 1.4rem; font-weight: 900; color: var(--text-primary); margin-bottom: 4px; }
+  .modal-header p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+  .modal .microcopy {
+    font-size: 0.81rem; margin-bottom: 24px;
+  }
+  .modal .form-grid { margin-bottom: 18px; }
+  .modal-footer-note {
+    margin-top: 14px; font-size: 0.74rem; color: var(--text-muted);
+    text-align: center; line-height: 1.55;
+  }
+  .modal-success {
+    display: none; text-align: center; padding: 20px 0;
+  }
+  .modal-success-icon { font-size: 3rem; margin-bottom: 16px; }
+  .modal-success h3 { font-size: 1.2rem; font-weight: 800; color: var(--gold); margin-bottom: 10px; }
+  .modal-success p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.65; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .site-header { padding: 0 20px; }
+    .trust-inner, .faq-inner, .fees-inner, .tracking-inner { grid-template-columns: 1fr; gap: 30px; }
+    .not-box { grid-column: 1; }
+    .steps-grid::before { display: none; }
+    .step { padding: 0 12px 40px; }
+    .form-grid { grid-template-columns: 1fr; }
+    .form-card { padding: 28px 20px; }
+    .lockin-grid { grid-template-columns: 1fr; }
+    .fees-infographic { grid-template-columns: 1fr; }
+    .fee-card.discount, .fee-card.billing { grid-column: 1; }
+    .reviews-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ STICKY HEADER ══ -->
+<header class="site-header">
+  <a class="logo" href="#hero"><span>AW</span> Affiliate Warehouse</a>
+  <nav class="header-nav">
+    <a class="btn btn-ghost" href="#forms" onclick="switchTab('onboarding')">Contractor Onboarding</a>
+    <a class="btn btn-gold" href="#" onclick="event.preventDefault();openModal()">Apply Now</a>
+  </nav>
+</header>
+
+
+<!-- ══ 1. HERO ══ -->
+<section class="hero" id="hero">
+  <div class="hero-bg-img"></div>
+  <div class="hero-illustration"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🔒 Restricted Access Portal — Authorised Businesses Only</div>
+    <h1>Official Application &amp;<br><em>Onboarding Gateway</em></h1>
+    <p class="hero-sub">Strictly for Affiliate Warehouse Preferred Contractors and Eligible Trade Businesses. This is not a typical sign-up page — this is the official entry point to our National Trade Account operating under a Single Coordinated Structure.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-gold btn-lg" href="#" onclick="event.preventDefault();openModal()">Apply for Preferred Contractor Status</a>
+      <a class="btn btn-ghost btn-lg" href="#existing-onboarding" onclick="switchTab('onboarding')">Existing Contractor Onboarding</a>
+    </div>
+    <p class="hero-note">All applications are manually reviewed &nbsp;·&nbsp; Approval is not guaranteed &nbsp;·&nbsp; Eligibility criteria apply</p>
+  </div>
+</section>
+
+
+<!-- ══ 2. ACCESS & ELIGIBILITY ══ -->
+<section class="access-section" id="access">
+  <div class="container">
+    <div class="access-header">
+      <p class="section-label">Access &amp; Eligibility</p>
+      <h2 class="section-title">Who Uses This Gateway?</h2>
+      <p class="section-desc">This portal serves three distinct groups within the Affiliate Warehouse network. Identify your situation below before proceeding.</p>
+    </div>
+    <div class="cards-grid">
+      <div class="access-card">
+        <div class="card-icon">✅</div>
+        <p class="card-tag">Card 1</p>
+        <h3>Existing Member</h3>
+        <p>Existing Preferred Contractors — complete onboarding here to activate or manage your access to our National Trade Account.</p>
+      </div>
+      <div class="access-card">
+        <div class="card-icon">📋</div>
+        <p class="card-tag">Card 2</p>
+        <h3>New Applicant</h3>
+        <p>Seeking Contractor Status — apply for new membership based on eligibility criteria and compliance requirements we've established.</p>
+      </div>
+      <div class="access-card">
+        <div class="card-icon">🔍</div>
+        <p class="card-tag">Card 3</p>
+        <h3>Approval Process</h3>
+        <p>Approval Required — each application is manually reviewed and assessed against our standards before any access is granted.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ 3. HOW IT WORKS ══ -->
+<section class="how-section" id="how">
+  <div class="container">
+    <div class="how-header">
+      <p class="section-label">The Coordinated Model</p>
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-desc" style="margin:0 auto;text-align:center;max-width:640px;">Access our <strong style="color:var(--gold);">shared national trade accounts</strong> operating under a <strong style="color:var(--gold);">single coordinated structure</strong> — a unified framework designed for compliant, collective purchasing at scale.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Formal Application</h3>
+        <p>Apply with your business information and documentation. All fields are required for processing.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Assessment &amp; Alignment</h3>
+        <p>Our team will verify your compliance and review all fine-grained eligibility criteria before making a determination.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Authorised Access</h3>
+        <p>Once approved, you gain access to our shared national trade accounts — operating exclusively within the Single Coordinated Structure.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ FEES & TRANSPARENT INCENTIVE ══ -->
+<section class="fees-section" id="fees">
+  <div class="container">
+    <div class="fees-inner">
+      <div>
+        <p class="section-label">Transparent Incentive Model</p>
+        <h2 class="section-title">Fees &amp; How We're Paid</h2>
+        <p class="section-desc">No discount achieved means no charge to you. Our model is built entirely on performance — we only earn when you save.</p>
+      </div>
+      <div class="fees-infographic">
+        <div class="fee-card no-discount">
+          <span class="fee-card-icon">🚫</span>
+          <div class="fee-card-label">No Discount Achieved</div>
+          <div class="fee-card-value">$0 Fees</div>
+          <div class="fee-card-sub">Zero charge. No discount = no fee. Period.</div>
+        </div>
+        <div class="fee-card discount">
+          <span class="fee-card-icon">✅</span>
+          <div class="fee-card-label">Discount Achieved</div>
+          <div class="fee-card-value">1.1% Retained</div>
+          <div class="fee-card-sub">AW retains 1.1% of savings. You keep the rest.</div>
+        </div>
+        <div class="fee-card billing">
+          <span class="fee-card-icon">📅</span>
+          <div class="fee-card-body">
+            <div class="fee-card-label">Billing Cycle</div>
+            <div class="fee-card-value" style="font-size:1.1rem;">Monthly — Verified Savings Only</div>
+            <div class="fee-card-sub">Billed monthly, on confirmed and verified savings only. No hidden fees. No upfront costs.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ PRICE TRACKING & NOTIFICATIONS ══ -->
+<section class="tracking-section" id="tracking">
+  <div class="container">
+    <div class="tracking-inner">
+      <div>
+        <p class="section-label">Live Market Intelligence</p>
+        <h2 class="section-title">Price Tracking &amp; Notifications</h2>
+        <p class="section-desc">Our system works in the background — monitoring supplier pricing so you don't have to. Know before you quote.</p>
+        <div class="tracking-features">
+          <div class="tracking-feat">
+            <div class="tracking-feat-icon">📡</div>
+            <div class="tracking-feat-body">
+              <h4>Continuous Price Monitoring</h4>
+              <p>The system constantly monitors prices across our supplier network, flagging movements in real time.</p>
+            </div>
+          </div>
+          <div class="tracking-feat">
+            <div class="tracking-feat-icon">🔔</div>
+            <div class="tracking-feat-body">
+              <h4>Optional Email Alerts</h4>
+              <p>Opt in to receive email notifications whenever tracked product prices move up or down — your inbox, your choice.</p>
+            </div>
+          </div>
+          <div class="tracking-feat">
+            <div class="tracking-feat-icon">📐</div>
+            <div class="tracking-feat-body">
+              <h4>More Accurate Quoting</h4>
+              <p>Always quote with current pricing data. Reduce margin erosion and win more jobs with confidence.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tracking-visual">
+        <div class="tracking-visual-label">Live Price Monitor — Sample View</div>
+        <div class="price-row">
+          <span class="price-row-label">Cable — 2.5mm Twin & Earth</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="price-row-val down">$1.84/m</span>
+            <span class="price-row-badge badge-down">▼ −4.2%</span>
+          </div>
+        </div>
+        <div class="price-row">
+          <span class="price-row-label">RCD Safety Switch 2P</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="price-row-val up">$48.20</span>
+            <span class="price-row-badge badge-up">▲ +2.1%</span>
+          </div>
+        </div>
+        <div class="price-row">
+          <span class="price-row-label">HVAC Ducted System — 7.1kW</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="price-row-val stable">$1,240.00</span>
+            <span class="price-row-badge badge-stable">— Stable</span>
+          </div>
+        </div>
+        <div class="price-row">
+          <span class="price-row-label">Solar Inverter — 5kW Hybrid</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="price-row-val down">$892.00</span>
+            <span class="price-row-badge badge-down">▼ −6.8%</span>
+          </div>
+        </div>
+        <div class="price-row">
+          <span class="price-row-label">Switchboard — 12-Way</span>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="price-row-val up">$74.50</span>
+            <span class="price-row-badge badge-up">▲ +1.5%</span>
+          </div>
+        </div>
+        <div class="tracking-alert-bar">
+          🔔 Email alert sent — 3 tracked items moved since yesterday
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ NO LOCK-IN ══ -->
+<section class="lockin-section" id="lockin">
+  <div class="container">
+    <div class="lockin-inner">
+      <p class="section-label">Your Freedom Guarantee</p>
+      <h2 class="section-title">No Lock-In. Ever.</h2>
+      <p>We want you here because it works for you — not because you're contractually obligated. Here's what that means in practice:</p>
+      <div class="lockin-grid">
+        <div class="lockin-item">
+          <span class="lockin-icon">📄</span>
+          <h4>No Contracts</h4>
+          <p>No long-term contracts. No binding commitments. You can exit the arrangement at any time without penalties or fees.</p>
+        </div>
+        <div class="lockin-item">
+          <span class="lockin-icon">💰</span>
+          <h4>No Minimum Spend</h4>
+          <p>No obligation to spend a minimum amount each month. Use the account as much or as little as your jobs require.</p>
+        </div>
+        <div class="lockin-item">
+          <span class="lockin-icon">🔓</span>
+          <h4>No Exclusivity</h4>
+          <p>You can continue shopping from your existing supplier accounts. Our network runs alongside your current arrangements.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ 4. TRUST & COMPLIANCE ══ -->
+<section class="trust-section" id="trust">
+  <div class="container">
+    <div class="trust-inner">
+      <div>
+        <p class="section-label">Wholesaler-Safe Structure</p>
+        <h2 class="section-title">Trust &amp; Compliance Framework</h2>
+        <p class="section-desc">Our model is designed from the ground up to protect wholesaler relationships. Every purchase is auditable, traceable, and compliant.</p>
+        <div class="trust-badge-row">
+          <div class="trust-badge"><span>🏛️</span> Nationally Coordinated</div>
+          <div class="trust-badge"><span>📊</span> Tracked Purchases</div>
+          <div class="trust-badge"><span>🔐</span> Job Code Verified</div>
+          <div class="trust-badge"><span>✅</span> Supplier Compliant</div>
+        </div>
+      </div>
+      <div class="trust-quote-block">
+        <p>
+          <strong>This is not a re-selling or bypass system.</strong><br><br>
+          We operate collective purchasing under a single national framework. All purchases are tracked directly in the wholesaler's system according to your job code — ensuring full transparency, accountability, and supplier compliance at every transaction.
+        </p>
+      </div>
+      <div class="not-box">
+        <div class="not-box-title">🚫 Industry-Safe Disclaimer — What We Are NOT</div>
+        <ul class="not-list">
+          <li>We do <strong>NOT</strong> resell goods — all purchases are made directly for job use by approved contractors.</li>
+          <li>We do <strong>NOT</strong> alter wholesaler terms — your supplier's pricing structures and policies remain intact and unchanged.</li>
+          <li>We do <strong>NOT</strong> circumvent pricing structures — we operate transparently within them, under a single coordinated national account.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ 5. FORMS ══ -->
+<section class="forms-section" id="forms">
+  <div class="container">
+    <div class="forms-header">
+      <p class="section-label">Application Portal</p>
+      <h2 class="section-title">Submit Your Application</h2>
+      <p class="section-desc">Select the form that matches your purpose. All submissions are reviewed by our team prior to any access being granted.</p>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('apply')">Preferred Contractor Application</button>
+      <button class="tab-btn" onclick="switchTab('onboarding')">Existing Contractor Onboarding</button>
+      <button class="tab-btn" onclick="switchTab('wholesaler')">Wholesaler EOI</button>
+    </div>
+
+    <!-- FORM 1 -->
+    <div class="form-panel active" id="tab-apply">
+      <div class="form-card">
+        <div class="form-card-header"><h3>Preferred Contractor Application</h3></div>
+        <div class="microcopy">⚠️ <strong>Access is never automatic. Approval is required in all cases</strong> following manual assessment of your application. Submitting this form begins a qualification process only.</div>
+        <form onsubmit="return false;">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Business Name *</label>
+              <input type="text" placeholder="Your registered business name">
+            </div>
+            <div class="form-group">
+              <label>Contact Name *</label>
+              <input type="text" placeholder="Primary contact">
+            </div>
+            <div class="form-group">
+              <label>Mobile Number *</label>
+              <input type="tel" placeholder="+61 4XX XXX XXX">
+            </div>
+            <div class="form-group">
+              <label>Business Email *</label>
+              <input type="email" placeholder="you@business.com.au">
+            </div>
+            <div class="form-group full">
+              <label>Trade / Industry *</label>
+              <select>
+                <option value="">Select your trade...</option>
+                <option>Electrical Contractors</option>
+                <option>HVAC &amp; Air-Conditioning</option>
+                <option>Solar Installers</option>
+                <option>Plumbing &amp; Gas</option>
+                <option>General Construction</option>
+                <option>Carpentry &amp; Joinery</option>
+                <option>Fire Protection &amp; Security</option>
+                <option>Refrigeration &amp; Cooling</option>
+                <option>Industrial &amp; Commercial Maintenance</option>
+                <option>Other Trade</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label>Preferred Consultation Time</label>
+              <input type="datetime-local">
+              <span class="calendar-hint">📅 Our team will confirm your booking within 24 hours</span>
+            </div>
+          </div>
+          <button class="btn btn-gold btn-lg btn-full">Submit Application →</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- FORM 2 -->
+    <div class="form-panel" id="tab-onboarding">
+      <div id="existing-onboarding" style="scroll-margin-top:80px;"></div>
+      <div class="form-card">
+        <div class="form-card-header"><h3>Existing Contractor — Onboarding Portal</h3></div>
+        <div class="microcopy" style="border-left-color:#4ade80;background:rgba(74,222,128,0.07);color:#4ade80;">✅ This form is for contractors who have already been approved. Complete your onboarding details below to activate account access.</div>
+        <p class="form-subdesc">Already approved? Leave your details and our onboarding team will contact you within one business day to complete your account setup.</p>
+        <form onsubmit="return false;">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label>Business Name</label>
+              <input type="text" placeholder="Optional">
+            </div>
+            <div class="form-group">
+              <label>Mobile *</label>
+              <input type="tel" placeholder="+61 4XX XXX XXX">
+            </div>
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" placeholder="you@email.com">
+            </div>
+            <div class="form-group full">
+              <label>What would you like to know?</label>
+              <textarea placeholder="Describe your questions or area of interest..."></textarea>
+            </div>
+            <div class="form-group full">
+              <label>Best Time to Call</label>
+              <select>
+                <option>Morning (8am–12pm)</option>
+                <option>Afternoon (12pm–5pm)</option>
+                <option>Either</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-gold btn-lg btn-full">Request a Call-Back →</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- FORM 3 -->
+    <div class="form-panel" id="tab-wholesaler">
+      <div class="form-card">
+        <div class="form-card-header"><h3>Wholesaler Expression of Interest</h3></div>
+        <p class="form-subdesc">Are you a supplier or wholesaler interested in partnering with the Affiliate Warehouse network? Submit your EOI and our procurement team will be in touch.</p>
+        <form onsubmit="return false;">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Company Name *</label>
+              <input type="text" placeholder="Wholesaler / supplier name">
+            </div>
+            <div class="form-group">
+              <label>Contact Person *</label>
+              <input type="text" placeholder="Name &amp; title">
+            </div>
+            <div class="form-group">
+              <label>Business Phone *</label>
+              <input type="tel" placeholder="Phone number">
+            </div>
+            <div class="form-group">
+              <label>Business Email *</label>
+              <input type="email" placeholder="contact@supplier.com">
+            </div>
+            <div class="form-group full">
+              <label>Product / Category</label>
+              <input type="text" placeholder="What products or categories do you supply?">
+            </div>
+            <div class="form-group full">
+              <label>National Coverage</label>
+              <select>
+                <option>Yes — National</option>
+                <option>State / Regional Only</option>
+                <option>Metropolitan Only</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label>Additional Information</label>
+              <textarea placeholder="Tell us about your business, capacity, and why you'd like to partner with us..."></textarea>
+            </div>
+          </div>
+          <button class="btn btn-gold btn-lg btn-full">Submit EOI →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ 6. FAQ ══ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="faq-inner">
+      <div class="faq-sidebar">
+        <p class="section-label">FAQs</p>
+        <h2 class="section-title">Common Questions</h2>
+        <p class="section-desc">Everything you need to know about the Preferred Contractor model and how our national account operates.</p>
+      </div>
+      <div class="faq-list">
+
+        <div class="faq-item open">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Will I get direct access? <span class="icon">+</span>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">No. Only Approved Preferred Contractors can use our Shared Trade Account. Direct access is never granted prior to full approval, and approval is not automatic upon application.</div></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            How long does the approval process take? <span class="icon">+</span>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">All applications are manually reviewed by our team. Timelines vary depending on volume and the completeness of your submission. Ensure all information is accurate to avoid delays.</div></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Is this a reselling or bypass arrangement? <span class="icon">+</span>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">Absolutely not. This is a collective purchasing model under a single national framework. All purchases are tracked in the wholesaler's system under your specific job code — complete transparency and full supplier compliance.</div></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What are the eligibility requirements? <span class="icon">+</span>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">Eligibility is assessed across multiple criteria including trade licensing, ABN registration, business compliance, and alignment with our network standards. Our team will advise you on your specific situation after reviewing your application.</div></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Are pricing and discounts guaranteed? <span class="icon">+</span>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">Pricing and discounts are subject to supplier approval and vary by product and current market conditions. Our team can provide indicative information during your consultation call.</div></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            Can any business apply? <span class="icon">+</span>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">Only eligible trade businesses operating within our network criteria may apply. Consumer and retail applicants are not eligible. If you are unsure, request a call-back and our team will assess your suitability before you formally apply.</div></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What wholesaler accounts do I get access to? <span class="icon">+</span>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">Approved Preferred Contractors gain access to our shared trade accounts with key national suppliers including <strong>TradeZone</strong>, <strong>Ideal Electrical</strong>, and <strong>Voltex</strong>. Additional supplier accounts may become available as the network expands.</div></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            How are better prices achieved? <span class="icon">+</span>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">Better pricing is achieved through aggregated purchasing volume across independent Preferred Contractors nationally. By consolidating spend under a single coordinated structure, the network carries the buying power of a much larger entity — delivering pricing that individual contractors cannot access alone.</div></div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            What if it stops being useful to me? <span class="icon">+</span>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">You can stop using the account at any time. There are no lock-in contracts, no minimum spend requirements, and no exit fees. Simply let our team know and your access will be deactivated. Your existing supplier accounts remain completely unaffected.</div></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ REVIEWS & SOCIAL PROOF ══ -->
+<section class="reviews-section" id="reviews">
+  <div class="container">
+    <div class="reviews-header">
+      <p class="section-label">Social Proof</p>
+      <h2 class="section-title">What Our Preferred Contractors Say</h2>
+      <p class="section-desc">Hear from trade businesses already operating within the Single Coordinated Structure.</p>
+    </div>
+    <div class="reviews-grid">
+
+      <div class="review-card">
+        <span class="review-verified">✔ Verified Contractor</span>
+        <div class="review-stars">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">The price monitoring alone has changed how we quote jobs. We saved nearly $4,200 last quarter without changing a single supplier relationship.</p>
+        <div class="review-author">
+          <div class="review-avatar">JM</div>
+          <div>
+            <div class="review-name">Jason M.</div>
+            <div class="review-role">Electrical Contractor · Brisbane, QLD</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <span class="review-verified">✔ Verified Contractor</span>
+        <div class="review-stars">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">I was sceptical at first — too many platforms promise savings that never materialise. This is different. The 1.1% model means they only win when I win.</p>
+        <div class="review-author">
+          <div class="review-avatar">DK</div>
+          <div>
+            <div class="review-name">Daniel K.</div>
+            <div class="review-role">HVAC &amp; Air-Conditioning · Melbourne, VIC</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <span class="review-verified">✔ Verified Contractor</span>
+        <div class="review-stars">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">The no lock-in guarantee sealed it for me. We still use our existing accounts but the national buying power through Affiliate Warehouse has been a genuine competitive edge on tenders.</p>
+        <div class="review-author">
+          <div class="review-avatar">SR</div>
+          <div>
+            <div class="review-name">Sarah R.</div>
+            <div class="review-role">Solar Installer · Perth, WA</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="review-card">
+        <span class="review-verified">✔ Verified Contractor</span>
+        <div class="review-stars">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">Access to TradeZone, Ideal Electrical and Voltex under one account has simplified our procurement enormously. The onboarding team was thorough and professional throughout.</p>
+        <div class="review-author">
+          <div class="review-avatar">TN</div>
+          <div>
+            <div class="review-name">Tom N.</div>
+            <div class="review-role">Electrical Contractor · Sydney, NSW</div>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- <div class="review-card">
+        <span class="review-verified">✔ Verified Contractor</span>
+        <div class="review-stars">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">No contracts, no minimum spend, and we still buy from our old accounts. It genuinely is as advertised. Our margins on materials have improved meaningfully.</p>
+        <div class="review-author">
+          <div class="review-avatar">MW</div>
+          <div>
+            <div class="review-name">Marcus W.</div>
+            <div class="review-role">Refrigeration &amp; Cooling · Adelaide, SA</div>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- <div class="review-card">
+        <span class="review-verified">✔ Verified Contractor</span>
+        <div class="review-stars">⭐⭐⭐⭐⭐</div>
+        <p class="review-text">The approval process was detailed — which gave me confidence. They clearly aren't accepting just anyone. That exclusivity is what makes the buying power work for everyone in the network.</p>
+        <div class="review-author">
+          <div class="review-avatar">CL</div>
+          <div>
+            <div class="review-name">Chris L.</div>
+            <div class="review-role">Fire Protection &amp; Security · Gold Coast, QLD</div>
+          </div>
+        </div>
+      </div> -->
+
+    </div>
+
+    <div class="reviews-summary">
+      <div class="reviews-score">5.0</div>
+      <div class="review-stars" style="justify-content:center;margin:10px 0 6px;">⭐⭐⭐⭐⭐</div>
+      <div class="reviews-score-label">Average rating from Verified Preferred Contractors &nbsp;·&nbsp; All reviews manually verified by the Affiliate Warehouse team</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><span>AW</span> Affiliate Warehouse</div>
+    <div class="footer-links">
+      <a href="#access">Eligibility</a>
+      <a href="#how">How It Works</a>
+      <a href="#fees">Fees</a>
+      <a href="#tracking">Price Tracking</a>
+      <a href="#lockin">Guarantee</a>
+      <a href="#trust">Compliance</a>
+      <a href="#forms">Apply</a>
+      <a href="#faq">FAQ</a>
+      <a href="#reviews">Reviews</a>
+    </div>
+    <hr class="footer-divider">
+    <p class="disclaimer">
+      <strong>Legal Disclaimer:</strong> Pricing and discounts are subject to supplier approval. Savings vary by product and market conditions. Submission of an application does not constitute acceptance into the Preferred Contractor program. All applications are subject to manual review and approval at the sole discretion of Affiliate Warehouse. This portal is restricted to eligible trade businesses only.
+    </p>
+    <p class="copyright">© 2024 Affiliate Warehouse. All rights reserved. National Trade Account — Single Coordinated Structure.</p>
+  </div>
+</footer>
+
+
+<!-- ══ APPLY NOW MODAL ══ -->
+<div class="modal-backdrop" id="applyModal" onclick="closeModalOutside(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+
+    <!-- Form view -->
+    <div id="modalFormView">
+      <div class="modal-header">
+        <div class="modal-eyebrow">🔒 Preferred Contractor Gateway</div>
+        <h2 id="modalTitle">Apply for Preferred Contractor Status</h2>
+        <p>Complete the fields below to begin your qualification process. Our team reviews every application manually.</p>
+      </div>
+      <div class="microcopy">⚠️ <strong>Access is never automatic. Approval is required in all cases</strong> following manual assessment of your application.</div>
+      <form onsubmit="submitModal(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Business Name *</label>
+            <input type="text" placeholder="Your registered business name" required>
+          </div>
+          <div class="form-group">
+            <label>Contact Name *</label>
+            <input type="text" placeholder="Primary contact" required>
+          </div>
+          <div class="form-group">
+            <label>Mobile Number *</label>
+            <input type="tel" placeholder="+61 4XX XXX XXX" required>
+          </div>
+          <div class="form-group">
+            <label>Business Email *</label>
+            <input type="email" placeholder="you@business.com.au" required>
+          </div>
+          <div class="form-group full">
+            <label>Trade / Industry *</label>
+            <select required>
+              <option value="">Select your trade...</option>
+              <option>Electrical Contractors</option>
+              <option>HVAC &amp; Air-Conditioning</option>
+              <option>Solar Installers</option>
+              <option>Plumbing &amp; Gas</option>
+              <option>General Construction</option>
+              <option>Carpentry &amp; Joinery</option>
+              <option>Fire Protection &amp; Security</option>
+              <option>Refrigeration &amp; Cooling</option>
+              <option>Industrial &amp; Commercial Maintenance</option>
+              <option>Other Trade</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label>Preferred Consultation Time</label>
+            <input type="datetime-local">
+            <span class="calendar-hint">📅 Our team will confirm your booking within 24 hours</span>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-gold btn-lg btn-full">Submit Application →</button>
+        <p class="modal-footer-note">By submitting, you confirm this is a legitimate trade business enquiry.<br>All information is kept strictly confidential.</p>
+      </form>
+    </div>
+
+    <!-- Success view -->
+    <div class="modal-success" id="modalSuccessView">
+      <div class="modal-success-icon">✅</div>
+      <h3>Application Received</h3>
+      <p>Thank you — your application has been submitted successfully. Our team will review your details and be in touch within 1–2 business days.<br><br>
+      <strong style="color:var(--gold);">Remember:</strong> Access is never automatic. You will be notified of the outcome following manual assessment.</p>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function openModal() {
+    document.getElementById('applyModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('applyModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('applyModal')) closeModal();
+  }
+  function submitModal(e) {
+    e.preventDefault();
+    document.getElementById('modalFormView').style.display = 'none';
+    document.getElementById('modalSuccessView').style.display = 'block';
+    setTimeout(closeModal, 4000);
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  function switchTab(id) {
+    const ids = ['apply','onboarding','wholesaler'];
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', ids[i] === id);
+    });
+    document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    const scrollTarget = id === 'onboarding'
+      ? document.getElementById('existing-onboarding')
+      : document.getElementById('forms');
+    if (scrollTarget) scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+</script>
+</body>
+</html>
